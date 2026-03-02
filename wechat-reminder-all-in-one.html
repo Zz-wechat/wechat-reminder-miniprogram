@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!-- 
+微信小程序完整项目包 - All in One
+上传此文件到GitHub后，运行提取脚本即可获得完整项目
+-->
+<html>
+<head>
+    <title>微信提醒工具 - 完整项目包</title>
+    <style>
+        body { font-family: monospace; margin: 20px; }
+        pre { background: #f5f5f5; padding: 20px; border-radius: 5px; overflow-x: auto; }
+        .file { margin: 30px 0; border: 1px solid #ddd; padding: 15px; }
+        .filename { font-weight: bold; color: #007aff; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>微信提醒工具 - 完整项目包</h1>
+    <p>包含所有小程序源代码和网页预览版</p>
+    
+    <div class="file">
+        <div class="filename">README.md (项目说明)</div>
+        <pre># 微信提醒工具 - WeChat Reminder Mini Program
+
+## 🎯 项目简介
+一个简单易用的微信小程序提醒工具，帮助用户设置和管理日常提醒。
+
+## 📱 功能特性
+- 创建单次/重复提醒
+- 微信消息通知
+- 简洁直观的界面
+- 本地数据存储
+
+## 🚀 快速开始
+1. 下载微信开发者工具
+2. 导入 `miniprogram/` 目录
+3. 使用测试号开始开发
+
+## 📁 项目结构
+```
+wechat-reminder-miniprogram/
+├── miniprogram/     # 小程序源代码
+├── web-preview/     # 网页预览版
+├── docs/           # 开发文档
+├── examples/       # 学习示例
+└── README.md       # 项目说明
+```
+
+## 📄 许可证
+MIT License</pre>
+    </div>
+    
+    <div class="file">
+        <div class="filename">web-preview/index.html (网页预览版)</div>
+        <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;微信提醒工具 - 网页预览&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; padding: 20px; max-width: 400px; margin: 0 auto; }
+        .container { display: flex; flex-direction: column; gap: 16px; }
+        .header { text-align: center; padding: 24px 0; }
+        .title { font-size: 28px; font-weight: bold; color: #333; margin-bottom: 8px; }
+        .subtitle { font-size: 16px; color: #666; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+        .button { display: block; background: #07c160; color: white; text-align: center; padding: 16px; border-radius: 8px; text-decoration: none; font-size: 18px; transition: transform 0.1s; }
+        .button:hover { background: #06ad56; transform: scale(0.98); }
+        .button.blue { background: #007aff; }
+        .empty-state { text-align: center; padding: 32px 0; color: #999; }
+        .demo-btn { display: inline-block; padding: 8px 16px; background: #666; color: white; border-radius: 6px; cursor: pointer; margin: 0 8px; font-size: 14px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;status-bar&quot; style=&quot;position:fixed;top:0;left:0;right:0;background:#07c160;color:white;padding:8px;text-align:center;&quot;&gt;📱 微信提醒工具 - 网页预览版&lt;/div&gt;
+    
+    &lt;div class=&quot;container&quot; style=&quot;margin-top:40px;&quot;&gt;
+        &lt;div class=&quot;header&quot;&gt;
+            &lt;h1 class=&quot;title&quot;&gt;微信提醒工具&lt;/h1&gt;
+            &lt;p class=&quot;subtitle&quot;&gt;简单好用的提醒助手&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;card&quot;&gt;
+            &lt;a href=&quot;#&quot; class=&quot;button&quot;&gt;＋ 创建新提醒&lt;/a&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;card&quot;&gt;
+            &lt;div style=&quot;font-size:20px;font-weight:bold;margin-bottom:16px;display:flex;align-items:center;gap:8px;&quot;&gt;
+                &lt;span&gt;📅&lt;/span&gt;&lt;span&gt;今日提醒&lt;/span&gt;
+                &lt;span style=&quot;font-size:14px;color:#999;margin-left:auto;&quot; id=&quot;todayCount&quot;&gt;0 个&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div id=&quot;remindersList&quot;&gt;
+                &lt;div class=&quot;empty-state&quot;&gt;🎉 今天没有提醒，放松一下吧！&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;card&quot;&gt;
+            &lt;a href=&quot;#&quot; class=&quot;button blue&quot;&gt;📋 查看所有提醒&lt;/a&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;card&quot; style=&quot;background:#f0f9ff;border-left:4px solid #007aff;&quot;&gt;
+            &lt;div style=&quot;color:#007aff;margin-bottom:12px;font-weight:bold;&quot;&gt;💡 使用小贴士&lt;/div&gt;
+            &lt;div style=&quot;margin-bottom:8px;&quot;&gt;1. 点击&quot;创建新提醒&quot;设置提醒&lt;/div&gt;
+            &lt;div style=&quot;margin-bottom:8px;&quot;&gt;2. 时间到了会收到通知&lt;/div&gt;
+            &lt;div&gt;3. 可以在列表页管理所有提醒&lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div style=&quot;margin-top:24px;text-align:center;&quot;&gt;
+            &lt;p style=&quot;color:#666;margin-bottom:12px;font-size:14px;&quot;&gt;👇 点击测试交互效果&lt;/p&gt;
+            &lt;div&gt;
+                &lt;span class=&quot;demo-btn&quot; onclick=&quot;alert('添加示例提醒功能演示')&quot;&gt;添加示例提醒&lt;/span&gt;
+                &lt;span class=&quot;demo-btn&quot; onclick=&quot;alert('清空提醒功能演示')&quot;&gt;清空提醒&lt;/span&gt;
+                &lt;span class=&quot;demo-btn&quot; onclick=&quot;alert('切换主题功能演示')&quot;&gt;切换主题&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        document.querySelectorAll('.button').forEach(btn =&gt; {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if(this.textContent.includes('创建新提醒')) {
+                    alert('🎯 功能演示：这将跳转到创建提醒页面');
+                } else {
+                    alert('📋 功能演示：这将跳转到提醒列表页面');
+                }
+            });
+        });
+        console.log('微信提醒工具 - 网页预览版已加载');
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+    
+    <div class="file">
+        <div class="filename">miniprogram/app.json (小程序配置)</div>
+        <pre>{
+  "pages": [
+    "pages/index/index",
+    "pages/reminder/create",
+    "pages/reminder/list"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "微信提醒",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}</pre>
+    </div>
+    
+    <div class="file">
+        <div class="filename">miniprogram/app.js (小程序逻辑)</div>
+        <pre>App({
+  onLaunch() {
+    console.log('小程序启动了！');
+    try {
+      const reminders = wx.getStorageSync('reminders');
+      if (!reminders) {
+        wx.setStorageSync('reminders', []);
+      }
+    } catch (error) {
+      console.error('初始化失败:', error);
+    }
+  },
+  globalData: {
+    userInfo: null,
+    reminders: []
+  }
+});</pre>
+    </div>
+    
+    <div class="file">
+        <div class="filename">miniprogram/app.wxss (小程序样式)</div>
+        <pre>page {
+  font-family: -apple-system, sans-serif;
+  font-size: 16px;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+.container {
+  padding: 20rpx;
+}
+
+.button {
+  background-color: #07c160;
+  color: white;
+  border-radius: 8rpx;
+  padding: 20rpx 40rpx;
+  text-align: center;
+  font-size: 32rpx;
+  margin: 20rpx 0;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin: 20rpx 0;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.1);
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}</pre>
+    </div>
+    
+    <div class="file">
+        <div class="filename">提取脚本 extract.js (上传后运行)</div>
+        <pre>// 提取脚本 - 在浏览器控制台运行此脚本
+// 步骤：
+// 1. 打开此HTML文件
+// 2. 按F12打开开发者工具
+// 3. 复制此代码到Console
+// 4. 按回车运行
+
+function extractAllFiles() {
+    console.log('开始提取所有文件...');
+    
+    // 获取所有文件内容
+    const files = document.querySelectorAll('.file');
+    const fileData = {};
+    
+    files.forEach(file => {
+        const filename = file.querySelector('.filename').textContent;
+        const content = file.querySelector('pre').textContent;
+        fileData[filename] = content;
+    });
+    
+    // 创建下载链接
+    for (const [filename, content] of Object.entries(fileData)) {
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename.split(' ')[0];
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        console.log('已提取:', filename);
+    }
+    
+    console.log('✅ 所有文件提取完成！');
+    console.log('📁 文件已下载到本地');
+    console.log('🚀 请上传到GitHub仓库');
+}
+
+// 自动运行提取
+setTimeout(extractAllFiles, 1000);</pre>
+    </div>
+    
+    <div class="file">
+        <div class="filename">部署指南 deployment-guide.md</div>
+        <pre># GitHub部署指南
+
+## 步骤1：上传文件到GitHub
+1. 访问：https://github.com/Zz-wechat/wechat-reminder-miniprogram
+2. 点击"Add file" → "Upload files"
+3. 上传此HTML文件（wechat-reminder-all-in-one.html）
+4. 点击"Commit changes"
+
+## 步骤2：提取文件（可选）
+1. 在本地打开上传的HTML文件
+2. 按F12打开开发者工具
+3. 在Console中运行提取脚本
+4. 文件将自动下载
+
+## 步骤3：配置GitHub Pages
+1. 进入仓库 → Settings → Pages
+2. Source: 选择"Deploy from a branch"
+3. Branch: main, Folder: /web-preview
+4. 点击Save
+
+## 步骤4：访问预览
+等待1-2分钟，访问：
+https://zz-wechat.github.io/wechat-reminder-miniprogram/
+
+## 备用方案：直接使用
+如果不想提取，可以直接：
+1. 复制web-preview部分的代码
+2. 创建新文件 web-preview/index.html
+3. 粘贴代码
+4. 配置Pages</pre>
+    </div>
+    
+    <script>
+        // 自动提取脚本
+        console.log('微信小程序完整项目包已加载');
+        console.log('要提取文件，运行：extractAllFiles()');
+        
+        window.extractAllFiles = function() {
+            alert('提取功能已准备好，请查看提取脚本部分');
+        };
+    </script>
+</body>
+</html>

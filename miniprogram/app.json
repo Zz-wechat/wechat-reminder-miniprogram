@@ -1,0 +1,16 @@
+// app.json - 全局配置文件
+{
+  "pages": [
+    "pages/index/index",
+    "pages/reminder/create",
+    "pages/reminder/list"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "微信提醒",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

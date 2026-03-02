@@ -1,0 +1,20 @@
+---
+# GitHub Pages配置
+# 将web-preview目录作为网站根目录
+---
+
+# 网站标题
+title: "微信提醒工具 - 网页预览版"
+description: "微信小程序提醒工具的交互式网页预览"
+
+# GitHub Pages设置
+theme: jekyll-theme-cayman
+
+# 构建排除
+exclude:
+  - miniprogram/
+  - docs/
+  - README.md
+  - LICENSE
+  - package.json
+  - .gitignore

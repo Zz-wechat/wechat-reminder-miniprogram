@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信提醒工具 - 网页预览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.5;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 24px 0;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        
+        .button {
+            display: block;
+            background: #07c160;
+            color: white;
+            text-align: center;
+            padding: 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+        
+        .button:hover {
+            background: #06ad56;
+            transform: scale(0.98);
+        }
+        
+        .button.blue {
+            background: #007aff;
+        }
+        
+        .button.blue:hover {
+            background: #0069d9;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 32px 0;
+            color: #999;
+        }
+        
+        .reminder-item {
+            padding: 16px;
+            border-left: 4px solid #07c160;
+            background: #f9f9f9;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 12px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .reminder-content {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        
+        .reminder-time {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .tips {
+            background: #f0f9ff;
+            border-left: 4px solid #007aff;
+        }
+        
+        .tips-title {
+            color: #007aff;
+            margin-bottom: 12px;
+        }
+        
+        .tip-item {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .demo-controls {
+            margin-top: 24px;
+            text-align: center;
+        }
+        
+        .demo-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #666;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0 8px;
+            font-size: 14px;
+        }
+        
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #07c160;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="status-bar">📱 微信提醒工具 - 网页预览版</div>
+    
+    <div class="container" style="margin-top: 40px;">
+        <!-- 标题 -->
+        <div class="header">
+            <h1 class="title">微信提醒工具</h1>
+            <p class="subtitle">简单好用的提醒助手</p>
+        </div>
+        
+        <!-- 创建按钮 -->
+        <div class="card">
+            <a href="#" class="button">
+                ＋ 创建新提醒
+            </a>
+        </div>
+        
+        <!-- 今日提醒 -->
+        <div class="card">
+            <div class="section-title">
+                <span>📅</span>
+                <span>今日提醒</span>
+                <span style="font-size: 14px; color: #999; margin-left: auto;" id="todayCount">0 个</span>
+            </div>
+            
+            <div id="remindersList">
+                <!-- 动态内容会在这里显示 -->
+                <div class="empty-state">
+                    🎉 今天没有提醒，放松一下吧！
+                </div>
+            </div>
+        </div>
+        
+        <!-- 查看所有 -->
+        <div class="card">
+            <a href="#" class="button blue">
+                📋 查看所有提醒
+            </a>
+        </div>
+        
+        <!-- 使用提示 -->
+        <div class="card tips">
+            <div class="section-title tips-title">
+                💡 使用小贴士
+            </div>
+            <div class="tip-item">1. 点击"创建新提醒"设置提醒</div>
+            <div class="tip-item">2. 时间到了会收到通知</div>
+            <div class="tip-item">3. 可以在列表页管理所有提醒</div>
+        </div>
+        
+        <!-- 演示控制 -->
+        <div class="demo-controls">
+            <p style="color: #666; margin-bottom: 12px; font-size: 14px;">👇 点击测试交互效果</p>
+            <div>
+                <span class="demo-btn" onclick="addDemoReminder()">添加示例提醒</span>
+                <span class="demo-btn" onclick="clearReminders()">清空提醒</span>
+                <span class="demo-btn" onclick="toggleTheme()">切换主题</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 示例提醒数据
+        const demoReminders = [
+            { content: "10:00 团队会议", time: "10:00" },
+            { content: "12:00 午餐时间", time: "12:00" },
+            { content: "15:00 客户电话", time: "15:00" },
+            { content: "18:00 健身房", time: "18:00" }
+        ];
+        
+        let currentTheme = 'light';
+        let reminders = [];
+        
+        // 更新提醒列表显示
+        function updateRemindersList() {
+            const listElement = document.getElementById('remindersList');
+            const countElement = document.getElementById('todayCount');
+            
+            countElement.textContent = `${reminders.length} 个`;
+            
+            if (reminders.length === 0) {
+                listElement.innerHTML = '<div class="empty-state">🎉 今天没有提醒，放松一下吧！</div>';
+                return;
+            }
+            
+            let html = '';
+            reminders.forEach((reminder, index) => {
+                html += `
+                    <div class="reminder-item">
+                        <div class="reminder-content">${reminder.content}</div>
+                        <div class="reminder-time">⏰ ${reminder.time}</div>
+                    </div>
+                `;
+            });
+            
+            listElement.innerHTML = html;
+        }
+        
+        // 添加示例提醒
+        function addDemoReminder() {
+            if (reminders.length >= 4) {
+                alert('演示最多显示4个提醒');
+                return;
+            }
+            
+            const randomReminder = demoReminders[reminders.length % demoReminders.length];
+            reminders.push({...randomReminder});
+            updateRemindersList();
+            
+            // 添加动画效果
+            const items = document.querySelectorAll('.reminder-item');
+            if (items.length > 0) {
+                const lastItem = items[items.length - 1];
+                lastItem.style.animation = 'none';
+                setTimeout(() => {
+                    lastItem.style.animation = 'fadeIn 0.3s ease-out';
+                }, 10);
+            }
+        }
+        
+        // 清空所有提醒
+        function clearReminders() {
+            reminders = [];
+            updateRemindersList();
+        }
+        
+        // 切换主题
+        function toggleTheme() {
+            const body = document.body;
+            const cards = document.querySelectorAll('.card');
+            
+            if (currentTheme === 'light') {
+                // 切换到深色主题
+                body.style.backgroundColor = '#1a1a1a';
+                body.style.color = '#fff';
+                
+                cards.forEach(card => {
+                    card.style.backgroundColor = '#2d2d2d';
+                    card.style.color = '#fff';
+                });
+                
+                currentTheme = 'dark';
+            } else {
+                // 切换回浅色主题
+                body.style.backgroundColor = '#f5f5f5';
+                body.style.color = '#333';
+                
+                cards.forEach(card => {
+                    card.style.backgroundColor = 'white';
+                    card.style.color = '#333';
+                });
+                
+                currentTheme = 'light';
+            }
+        }
+        
+        // 按钮点击效果
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+                
+                if (this.textContent.includes('创建新提醒')) {
+                    alert('🎯 功能演示：这将跳转到创建提醒页面\n\n在小程序中，这里会：\n1. 打开新页面\n2. 显示时间选择器\n3. 允许输入提醒内容');
+                } else if (this.textContent.includes('查看所有提醒')) {
+                    alert('📋 功能演示：这将跳转到提醒列表页面\n\n在小程序中，这里会：\n1. 显示所有提醒\n2. 支持删除和编辑\n3. 可以标记完成状态');
+                }
+            });
+        });
+        
+        // 页面加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('微信提醒工具 - 网页预览版已加载');
+            console.log('👆 点击按钮测试交互效果');
+        });
+    </script>
+</body>
+</html>

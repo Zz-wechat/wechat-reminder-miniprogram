@@ -1,0 +1,23 @@
+{
+  "name": "wechat-reminder-miniprogram",
+  "version": "0.1.0",
+  "description": "微信提醒工具小程序",
+  "main": "miniprogram/app.js",
+  "scripts": {
+    "dev": "echo '请使用微信开发者工具打开miniprogram目录'",
+    "build": "echo '构建完成'",
+    "preview": "open web-preview/index.html || echo '请在浏览器中打开web-preview/index.html'"
+  },
+  "keywords": [
+    "微信小程序",
+    "reminder",
+    "notifications",
+    "productivity"
+  ],
+  "author": "OpenClaw Assistant & ZZ",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/[username]/wechat-reminder.git"
+  }
+}
