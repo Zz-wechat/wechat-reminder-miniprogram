@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>微信提醒工具 - 网页预览</title>
+    <title>微信提醒工具 - 重要日子 & 指标提醒</title>
     <style>
         * {
             margin: 0;
@@ -13,124 +13,229 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
             line-height: 1.5;
             padding: 20px;
-            max-width: 400px;
-            margin: 0 auto;
+            min-height: 100vh;
         }
         
         .container {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
+            max-width: 400px;
+            margin: 0 auto;
         }
         
         .header {
             text-align: center;
-            padding: 24px 0;
+            padding: 30px 0;
+            color: white;
         }
         
         .title {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .subtitle {
             font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        /* 功能卡片 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .feature-card.important-days {
+            border-color: #ff6b6b;
+        }
+        
+        .feature-card.indicator-reminder {
+            border-color: #4dabf7;
+        }
+        
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+        
+        .feature-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        
+        .feature-desc {
+            font-size: 12px;
             color: #666;
         }
         
-        .card {
+        /* 今日概览 */
+        .overview-card {
             background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-        }
-        
-        .button {
-            display: block;
-            background: #07c160;
-            color: white;
-            text-align: center;
-            padding: 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 500;
-            transition: transform 0.1s, background-color 0.2s;
-        }
-        
-        .button:hover {
-            background: #06ad56;
-            transform: scale(0.98);
-        }
-        
-        .button.blue {
-            background: #007aff;
-        }
-        
-        .button.blue:hover {
-            background: #0069d9;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
         
         .section-title {
             font-size: 20px;
             font-weight: bold;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .overview-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .overview-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+        
+        .overview-item.important {
+            border-left-color: #ff6b6b;
+        }
+        
+        .overview-item.indicator {
+            border-left-color: #4dabf7;
+        }
+        
+        .item-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .item-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .item-count {
+            font-weight: bold;
+            font-size: 20px;
+            color: #333;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #999;
+            font-size: 16px;
+        }
+        
+        /* 操作按钮 */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+        
+        .action-btn:hover {
+            transform: scale(0.98);
+        }
+        
+        .action-btn.add {
+            background: linear-gradient(135deg, #07c160, #06ad56);
+            color: white;
+        }
+        
+        .action-btn.settings {
+            background: linear-gradient(135deg, #ffd43b, #fab005);
+            color: #333;
+        }
+        
+        /* 提示信息 */
+        .tips-card {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 16px;
+            padding: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tips-title {
+            color: #1976d2;
+            font-weight: bold;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 32px 0;
-            color: #999;
-        }
-        
-        .reminder-item {
-            padding: 16px;
-            border-left: 4px solid #07c160;
-            background: #f9f9f9;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 12px;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .reminder-content {
-            font-size: 18px;
-            margin-bottom: 4px;
-        }
-        
-        .reminder-time {
-            font-size: 14px;
-            color: #999;
-        }
-        
-        .tips {
-            background: #f0f9ff;
-            border-left: 4px solid #007aff;
-        }
-        
-        .tips-title {
-            color: #007aff;
-            margin-bottom: 12px;
-        }
-        
         .tip-item {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 14px;
-            color: #666;
+            color: #333;
+            padding-left: 20px;
+            position: relative;
         }
         
+        .tip-item:before {
+            content: "•";
+            color: #2196f3;
+            position: absolute;
+            left: 0;
+        }
+        
+        /* 动画 */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -138,213 +243,242 @@
             }
         }
         
-        .demo-controls {
-            margin-top: 24px;
-            text-align: center;
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
         }
         
-        .demo-btn {
-            display: inline-block;
-            padding: 8px 16px;
-            background: #666;
-            color: white;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 0 8px;
-            font-size: 14px;
-        }
-        
-        .status-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #07c160;
-            color: white;
-            padding: 8px;
-            text-align: center;
-            font-size: 14px;
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="status-bar">📱 微信提醒工具 - 网页预览版</div>
-    
-    <div class="container" style="margin-top: 40px;">
+    <div class="container">
         <!-- 标题 -->
-        <div class="header">
-            <h1 class="title">微信提醒工具</h1>
-            <p class="subtitle">简单好用的提醒助手</p>
+        <div class="header fade-in">
+            <h1 class="title">📅 微信提醒工具</h1>
+            <p class="subtitle">管理重要日子 & 监控关键指标</p>
         </div>
         
-        <!-- 创建按钮 -->
-        <div class="card">
-            <a href="#" class="button">
-                ＋ 创建新提醒
-            </a>
-        </div>
-        
-        <!-- 今日提醒 -->
-        <div class="card">
-            <div class="section-title">
-                <span>📅</span>
-                <span>今日提醒</span>
-                <span style="font-size: 14px; color: #999; margin-left: auto;" id="todayCount">0 个</span>
+        <!-- 功能入口 -->
+        <div class="features-grid fade-in" style="animation-delay: 0.1s;">
+            <div class="feature-card important-days" onclick="goToImportantDays()">
+                <div class="feature-icon">🎂</div>
+                <div class="feature-title">重要日子</div>
+                <div class="feature-desc">生日、纪念日等</div>
             </div>
             
-            <div id="remindersList">
-                <!-- 动态内容会在这里显示 -->
-                <div class="empty-state">
-                    🎉 今天没有提醒，放松一下吧！
+            <div class="feature-card indicator-reminder" onclick="goToIndicatorReminder()">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">指标提醒</div>
+                <div class="feature-desc">股票、数据监控</div>
+            </div>
+        </div>
+        
+        <!-- 今日概览 -->
+        <div class="overview-card fade-in" style="animation-delay: 0.2s;">
+            <div class="section-title">
+                <span>📋</span>
+                <span>今日概览</span>
+            </div>
+            
+            <div class="overview-items">
+                <div class="overview-item important" id="importantDaysItem">
+                    <div class="item-icon">🎂</div>
+                    <div class="item-content">
+                        <div class="item-title">重要日子</div>
+                        <div class="item-desc">今日有 <span id="importantDaysCount" class="item-count">0</span> 个</div>
+                    </div>
+                </div>
+                
+                <div class="overview-item indicator" id="indicatorsItem">
+                    <div class="item-icon">📊</div>
+                    <div class="item-content">
+                        <div class="item-title">指标监控</div>
+                        <div class="item-desc"><span id="activeIndicatorsCount" class="item-count">0</span> 个活跃中</div>
+                    </div>
+                </div>
+                
+                <div class="empty-state" id="emptyOverview">
+                    🎉 今天很轻松，没有安排！
                 </div>
             </div>
         </div>
         
-        <!-- 查看所有 -->
-        <div class="card">
-            <a href="#" class="button blue">
-                📋 查看所有提醒
-            </a>
+        <!-- 操作按钮 -->
+        <div class="action-buttons fade-in" style="animation-delay: 0.3s;">
+            <div class="action-btn add" onclick="addNewItem()">
+                ＋ 添加新项目
+            </div>
+            <div class="action-btn settings" onclick="openSettings()">
+                ⚙️ 设置
+            </div>
         </div>
         
         <!-- 使用提示 -->
-        <div class="card tips">
-            <div class="section-title tips-title">
-                💡 使用小贴士
-            </div>
-            <div class="tip-item">1. 点击"创建新提醒"设置提醒</div>
-            <div class="tip-item">2. 时间到了会收到通知</div>
-            <div class="tip-item">3. 可以在列表页管理所有提醒</div>
-        </div>
-        
-        <!-- 演示控制 -->
-        <div class="demo-controls">
-            <p style="color: #666; margin-bottom: 12px; font-size: 14px;">👇 点击测试交互效果</p>
-            <div>
-                <span class="demo-btn" onclick="addDemoReminder()">添加示例提醒</span>
-                <span class="demo-btn" onclick="clearReminders()">清空提醒</span>
-                <span class="demo-btn" onclick="toggleTheme()">切换主题</span>
-            </div>
+        <div class="tips-card fade-in" style="animation-delay: 0.4s;">
+            <div class="tips-title">💡 使用小贴士</div>
+            <div class="tip-item">点击"重要日子"管理生日、纪念日等</div>
+            <div class="tip-item">点击"指标提醒"设置股票、数据监控</div>
+            <div class="tip-item">支持农历/阳历日期，自定义重复规则</div>
+            <div class="tip-item">时间到了会自动发送微信提醒</div>
         </div>
     </div>
 
     <script>
-        // 示例提醒数据
-        const demoReminders = [
-            { content: "10:00 团队会议", time: "10:00" },
-            { content: "12:00 午餐时间", time: "12:00" },
-            { content: "15:00 客户电话", time: "15:00" },
-            { content: "18:00 健身房", time: "18:00" }
-        ];
+        // 初始化数据
+        let importantDays = [];
+        let indicators = [];
         
-        let currentTheme = 'light';
-        let reminders = [];
+        // 页面加载时更新概览
+        window.onload = function() {
+            updateOverview();
+            loadDemoData();
+        };
         
-        // 更新提醒列表显示
-        function updateRemindersList() {
-            const listElement = document.getElementById('remindersList');
-            const countElement = document.getElementById('todayCount');
+        // 更新概览显示
+        function updateOverview() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayImportantDays = importantDays.filter(day => day.date === today);
+            const activeIndicators = indicators.filter(ind => ind.status === 'active');
             
-            countElement.textContent = `${reminders.length} 个`;
+            const importantDaysCount = todayImportantDays.length;
+            const activeIndicatorsCount = activeIndicators.length;
+            const totalItems = importantDaysCount + activeIndicatorsCount;
             
-            if (reminders.length === 0) {
-                listElement.innerHTML = '<div class="empty-state">🎉 今天没有提醒，放松一下吧！</div>';
-                return;
-            }
+            // 更新计数
+            document.getElementById('importantDaysCount').textContent = importantDaysCount;
+            document.getElementById('activeIndicatorsCount').textContent = activeIndicatorsCount;
             
-            let html = '';
-            reminders.forEach((reminder, index) => {
-                html += `
-                    <div class="reminder-item">
-                        <div class="reminder-content">${reminder.content}</div>
-                        <div class="reminder-time">⏰ ${reminder.time}</div>
-                    </div>
-                `;
-            });
-            
-            listElement.innerHTML = html;
+            // 显示/隐藏项目
+            document.getElementById('importantDaysItem').style.display = importantDaysCount > 0 ? 'flex' : 'none';
+            document.getElementById('indicatorsItem').style.display = activeIndicatorsCount > 0 ? 'flex' : 'none';
+            document.getElementById('emptyOverview').style.display = totalItems === 0 ? 'block' : 'none';
         }
         
-        // 添加示例提醒
-        function addDemoReminder() {
-            if (reminders.length >= 4) {
-                alert('演示最多显示4个提醒');
-                return;
-            }
-            
-            const randomReminder = demoReminders[reminders.length % demoReminders.length];
-            reminders.push({...randomReminder});
-            updateRemindersList();
-            
-            // 添加动画效果
-            const items = document.querySelectorAll('.reminder-item');
-            if (items.length > 0) {
-                const lastItem = items[items.length - 1];
-                lastItem.style.animation = 'none';
-                setTimeout(() => {
-                    lastItem.style.animation = 'fadeIn 0.3s ease-out';
-                }, 10);
-            }
-        }
-        
-        // 清空所有提醒
-        function clearReminders() {
-            reminders = [];
-            updateRemindersList();
-        }
-        
-        // 切换主题
-        function toggleTheme() {
-            const body = document.body;
-            const cards = document.querySelectorAll('.card');
-            
-            if (currentTheme === 'light') {
-                // 切换到深色主题
-                body.style.backgroundColor = '#1a1a1a';
-                body.style.color = '#fff';
-                
-                cards.forEach(card => {
-                    card.style.backgroundColor = '#2d2d2d';
-                    card.style.color = '#fff';
-                });
-                
-                currentTheme = 'dark';
-            } else {
-                // 切换回浅色主题
-                body.style.backgroundColor = '#f5f5f5';
-                body.style.color = '#333';
-                
-                cards.forEach(card => {
-                    card.style.backgroundColor = 'white';
-                    card.style.color = '#333';
-                });
-                
-                currentTheme = 'light';
-            }
-        }
-        
-        // 按钮点击效果
-        document.querySelectorAll('.button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-                
-                if (this.textContent.includes('创建新提醒')) {
-                    alert('🎯 功能演示：这将跳转到创建提醒页面\n\n在小程序中，这里会：\n1. 打开新页面\n2. 显示时间选择器\n3. 允许输入提醒内容');
-                } else if (this.textContent.includes('查看所有提醒')) {
-                    alert('📋 功能演示：这将跳转到提醒列表页面\n\n在小程序中，这里会：\n1. 显示所有提醒\n2. 支持删除和编辑\n3. 可以标记完成状态');
+        // 加载示例数据
+        function loadDemoData() {
+            // 示例重要日子
+            importantDays = [
+                {
+                    id: 1,
+                    name: "妈妈的生日",
+                    date: new Date().toISOString().split('T')[0], // 今天
+                    type: "lunar",
+                    repeat: "yearly",
+                    remindDays: [1, 3, 7]
                 }
-            });
-        });
+            ];
+            
+            // 示例指标
+            indicators = [
+                {
+                    id: 1,
+                    name: "上证指数监控",
+                    dataSource: "stock",
+                    target: 3000,
+                    operator: ">",
+                    frequency: "daily",
+                    status: "active"
+                }
+            ];
+            
+            updateOverview();
+        }
         
-        // 页面加载完成
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('微信提醒工具 - 网页预览版已加载');
-            console.log('👆 点击按钮测试交互效果');
-        });
+        // 导航函数
+        function goToImportantDays() {
+            showMessage('正在跳转到重要日子管理...');
+            // 实际开发中这里会跳转到对应页面
+            setTimeout(() => {
+                showMessage('功能演示：重要日子管理页面');
+            }, 300);
+        }
+        
+        function goToIndicatorReminder() {
+            showMessage('正在跳转到指标提醒...');
+            // 实际开发中这里会跳转到对应页面
+            setTimeout(() => {
+                showMessage('功能演示：指标提醒设置页面');
+            }, 300);
+        }
+        
+        function addNewItem() {
+            const options = [
+                {text: "添加重要日子", icon: "🎂", action: goToImportantDays},
+                {text: "添加指标监控", icon: "📊", action: goToIndicatorReminder}
+            ];
+            
+            showMessage('请选择要添加的项目类型...');
+            // 实际开发中这里会显示选择菜单
+            setTimeout(() => {
+                showMessage('功能演示：添加项目选择菜单');
+            }, 300);
+        }
+        
+        function openSettings() {
+            showMessage('正在打开设置...');
+            // 实际开发中这里会打开设置页面
+            setTimeout(() => {
+                showMessage('功能演示：系统设置页面');
+            }, 300);
+        }
+        
+        // 显示消息
+        function showMessage(text) {
+            // 创建一个临时提示
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0,0,0,0.8);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                z-index: 1000;
+                font-size: 14px;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            message.textContent = text;
+            document.body.appendChild(message);
+            
+            // 3秒后移除
+            setTimeout(() => {
+                message.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (message.parentNode) {
+                        message.parentNode.removeChild(message);
+                    }
+                }, 300);
+            }, 2000);
+            
+            // 添加淡出动画
+            if (!document.querySelector('style').textContent.includes('fadeOut')) {
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fadeOut {
+                        from { opacity: 1; }
+                        to { opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        // 控制台日志
+        console.log('微信提醒工具 - 重要日子 & 指标提醒');
+        console.log('功能入口：重要日子、指标提醒');
+        console.log('今日概览：实时显示状态');
+        console.log('交互功能：点击卡片测试');
     </script>
 </body>
 </html>
