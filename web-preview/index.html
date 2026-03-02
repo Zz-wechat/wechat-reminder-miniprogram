@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>微信提醒工具 - 重要日子 & 指标提醒</title>
+    <title>重要日子提醒 - 微信小程序</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: #333;
             line-height: 1.5;
             padding: 20px;
@@ -28,6 +28,7 @@
             margin: 0 auto;
         }
         
+        /* 头部 */
         .header {
             text-align: center;
             padding: 30px 0;
@@ -46,60 +47,82 @@
             opacity: 0.9;
         }
         
-        /* 功能卡片 */
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
+        /* 主功能卡片 */
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
         }
         
-        .feature-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px 15px;
+        .main-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #f5576c;
+        }
+        
+        .main-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .main-desc {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        /* 功能按钮 */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            padding: 18px;
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border: 2px solid transparent;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-        }
-        
-        .feature-card.important-days {
-            border-color: #ff6b6b;
-        }
-        
-        .feature-card.indicator-reminder {
-            border-color: #4dabf7;
-        }
-        
-        .feature-icon {
-            font-size: 36px;
-            margin-bottom: 12px;
-        }
-        
-        .feature-title {
-            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 6px;
+            font-size: 16px;
+            transition: all 0.2s;
+            border: none;
+            outline: none;
         }
         
-        .feature-desc {
-            font-size: 12px;
-            color: #666;
+        .action-btn.primary {
+            background: linear-gradient(135deg, #f5576c, #f093fb);
+            color: white;
         }
         
-        /* 今日概览 */
-        .overview-card {
+        .action-btn.secondary {
             background: white;
-            border-radius: 16px;
+            color: #f5576c;
+            border: 2px solid #f5576c;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245,87,108,0.3);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* 今日提醒 */
+        .today-card {
+            background: white;
+            border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
         
         .section-title {
@@ -109,54 +132,36 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            color: #333;
         }
         
-        .overview-items {
+        .reminder-list {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
         
-        .overview-item {
+        .reminder-item {
+            background: #fff5f7;
+            border-radius: 12px;
+            padding: 18px;
+            border-left: 4px solid #f5576c;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .reminder-content {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .reminder-time {
+            font-size: 14px;
+            color: #f5576c;
             display: flex;
             align-items: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border-left: 4px solid;
-        }
-        
-        .overview-item.important {
-            border-left-color: #ff6b6b;
-        }
-        
-        .overview-item.indicator {
-            border-left-color: #4dabf7;
-        }
-        
-        .item-icon {
-            font-size: 24px;
-            margin-right: 15px;
-        }
-        
-        .item-content {
-            flex: 1;
-        }
-        
-        .item-title {
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-        
-        .item-desc {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .item-count {
-            font-weight: bold;
-            font-size: 20px;
-            color: #333;
+            gap: 6px;
         }
         
         .empty-state {
@@ -166,76 +171,89 @@
             font-size: 16px;
         }
         
-        /* 操作按钮 */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .action-btn {
+        /* 微信提醒状态 */
+        .wechat-status {
             background: white;
-            border-radius: 12px;
-            padding: 18px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-weight: bold;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border: 2px solid #07c160;
         }
         
-        .action-btn:hover {
-            transform: scale(0.98);
-        }
-        
-        .action-btn.add {
-            background: linear-gradient(135deg, #07c160, #06ad56);
-            color: white;
-        }
-        
-        .action-btn.settings {
-            background: linear-gradient(135deg, #ffd43b, #fab005);
-            color: #333;
-        }
-        
-        /* 提示信息 */
-        .tips-card {
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            border-radius: 16px;
-            padding: 20px;
-            border-left: 4px solid #2196f3;
-        }
-        
-        .tips-title {
-            color: #1976d2;
+        .status-title {
+            color: #07c160;
             font-weight: bold;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         
-        .tip-item {
-            margin-bottom: 10px;
+        .status-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-size: 14px;
-            color: #333;
+        }
+        
+        .status-icon.connected {
+            background: #07c160;
+        }
+        
+        .status-icon.disconnected {
+            background: #999;
+        }
+        
+        .status-text {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        /* 使用说明 */
+        .instructions {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+        }
+        
+        .instructions-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instruction-item {
+            margin-bottom: 12px;
             padding-left: 20px;
             position: relative;
         }
         
-        .tip-item:before {
-            content: "•";
-            color: #2196f3;
+        .instruction-item:before {
+            content: "✓";
             position: absolute;
             left: 0;
+            font-weight: bold;
         }
         
         /* 动画 */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
@@ -247,211 +265,280 @@
             animation: fadeIn 0.5s ease-out;
         }
         
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
         /* 响应式 */
         @media (max-width: 480px) {
-            .features-grid {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 15px;
             }
             
-            .action-buttons {
-                grid-template-columns: 1fr;
+            .main-card, .today-card, .wechat-status, .instructions {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 标题 -->
+        <!-- 头部 -->
         <div class="header fade-in">
-            <h1 class="title">📅 微信提醒工具</h1>
-            <p class="subtitle">管理重要日子 & 监控关键指标</p>
+            <h1 class="title">🎂 重要日子提醒</h1>
+            <p class="subtitle">生日、纪念日、节日提醒助手</p>
         </div>
         
-        <!-- 功能入口 -->
-        <div class="features-grid fade-in" style="animation-delay: 0.1s;">
-            <div class="feature-card important-days" onclick="goToImportantDays()">
-                <div class="feature-icon">🎂</div>
-                <div class="feature-title">重要日子</div>
-                <div class="feature-desc">生日、纪念日等</div>
+        <!-- 主功能卡片 -->
+        <div class="main-card fade-in" style="animation-delay: 0.1s;">
+            <div class="main-icon">📅</div>
+            <div class="main-title">管理重要日子</div>
+            <div class="main-desc">
+                记录生日、纪念日等特殊日子<br>
+                支持农历/阳历，自定义重复规则<br>
+                时间到了自动发送微信提醒
             </div>
             
-            <div class="feature-card indicator-reminder" onclick="goToIndicatorReminder()">
-                <div class="feature-icon">📊</div>
-                <div class="feature-title">指标提醒</div>
-                <div class="feature-desc">股票、数据监控</div>
+            <div class="action-buttons">
+                <button class="action-btn primary pulse" onclick="addImportantDay()">
+                    ＋ 添加重要日子
+                </button>
+                <button class="action-btn secondary" onclick="viewAllDays()">
+                    📋 查看所有日子
+                </button>
             </div>
         </div>
         
-        <!-- 今日概览 -->
-        <div class="overview-card fade-in" style="animation-delay: 0.2s;">
+        <!-- 今日提醒 -->
+        <div class="today-card fade-in" style="animation-delay: 0.2s;">
             <div class="section-title">
-                <span>📋</span>
-                <span>今日概览</span>
+                <span>⏰</span>
+                <span>今日提醒</span>
             </div>
             
-            <div class="overview-items">
-                <div class="overview-item important" id="importantDaysItem">
-                    <div class="item-icon">🎂</div>
-                    <div class="item-content">
-                        <div class="item-title">重要日子</div>
-                        <div class="item-desc">今日有 <span id="importantDaysCount" class="item-count">0</span> 个</div>
-                    </div>
-                </div>
-                
-                <div class="overview-item indicator" id="indicatorsItem">
-                    <div class="item-icon">📊</div>
-                    <div class="item-content">
-                        <div class="item-title">指标监控</div>
-                        <div class="item-desc"><span id="activeIndicatorsCount" class="item-count">0</span> 个活跃中</div>
-                    </div>
-                </div>
-                
-                <div class="empty-state" id="emptyOverview">
-                    🎉 今天很轻松，没有安排！
+            <div class="reminder-list" id="todayReminders">
+                <div class="empty-state">
+                    🎉 今天没有重要日子，放松一下吧！
                 </div>
             </div>
         </div>
         
-        <!-- 操作按钮 -->
-        <div class="action-buttons fade-in" style="animation-delay: 0.3s;">
-            <div class="action-btn add" onclick="addNewItem()">
-                ＋ 添加新项目
+        <!-- 微信提醒状态 -->
+        <div class="wechat-status fade-in" style="animation-delay: 0.3s;">
+            <div class="status-title">
+                <span>💬</span>
+                <span>微信提醒状态</span>
             </div>
-            <div class="action-btn settings" onclick="openSettings()">
-                ⚙️ 设置
+            
+            <div class="status-item">
+                <div class="status-icon connected">✓</div>
+                <div class="status-text">微信通知功能已就绪</div>
             </div>
+            
+            <div class="status-item">
+                <div class="status-icon connected">✓</div>
+                <div class="status-text">支持农历/阳历日期计算</div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-icon connected">✓</div>
+                <div class="status-text">可设置提前提醒天数</div>
+            </div>
+            
+            <button class="action-btn secondary" onclick="testWechatNotification()" 
+                    style="margin-top: 15px; width: 100%;">
+                🔔 测试微信提醒
+            </button>
         </div>
         
-        <!-- 使用提示 -->
-        <div class="tips-card fade-in" style="animation-delay: 0.4s;">
-            <div class="tips-title">💡 使用小贴士</div>
-            <div class="tip-item">点击"重要日子"管理生日、纪念日等</div>
-            <div class="tip-item">点击"指标提醒"设置股票、数据监控</div>
-            <div class="tip-item">支持农历/阳历日期，自定义重复规则</div>
-            <div class="tip-item">时间到了会自动发送微信提醒</div>
+        <!-- 使用说明 -->
+        <div class="instructions fade-in" style="animation-delay: 0.4s;">
+            <div class="instructions-title">
+                <span>📝</span>
+                <span>使用说明</span>
+            </div>
+            
+            <div class="instruction-item">支持农历和阳历日期</div>
+            <div class="instruction-item">可设置年/月/日重复规则</div>
+            <div class="instruction-item">微信消息自动提醒</div>
+            <div class="instruction-item">数据本地安全存储</div>
         </div>
     </div>
 
     <script>
-        // 初始化数据
+        // 示例数据
         let importantDays = [];
-        let indicators = [];
+        let wechatConnected = true;
         
-        // 页面加载时更新概览
+        // 页面加载
         window.onload = function() {
-            updateOverview();
-            loadDemoData();
+            loadSampleData();
+            updateTodayReminders();
+            updateWechatStatus();
         };
         
-        // 更新概览显示
-        function updateOverview() {
-            const today = new Date().toISOString().split('T')[0];
-            const todayImportantDays = importantDays.filter(day => day.date === today);
-            const activeIndicators = indicators.filter(ind => ind.status === 'active');
-            
-            const importantDaysCount = todayImportantDays.length;
-            const activeIndicatorsCount = activeIndicators.length;
-            const totalItems = importantDaysCount + activeIndicatorsCount;
-            
-            // 更新计数
-            document.getElementById('importantDaysCount').textContent = importantDaysCount;
-            document.getElementById('activeIndicatorsCount').textContent = activeIndicatorsCount;
-            
-            // 显示/隐藏项目
-            document.getElementById('importantDaysItem').style.display = importantDaysCount > 0 ? 'flex' : 'none';
-            document.getElementById('indicatorsItem').style.display = activeIndicatorsCount > 0 ? 'flex' : 'none';
-            document.getElementById('emptyOverview').style.display = totalItems === 0 ? 'block' : 'none';
-        }
-        
         // 加载示例数据
-        function loadDemoData() {
-            // 示例重要日子
+        function loadSampleData() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
             importantDays = [
                 {
                     id: 1,
                     name: "妈妈的生日",
-                    date: new Date().toISOString().split('T')[0], // 今天
+                    date: today.toISOString().split('T')[0],
                     type: "lunar",
                     repeat: "yearly",
-                    remindDays: [1, 3, 7]
-                }
-            ];
-            
-            // 示例指标
-            indicators = [
+                    remindDays: [1, 3, 7],
+                    notes: "记得买蛋糕"
+                },
                 {
-                    id: 1,
-                    name: "上证指数监控",
-                    dataSource: "stock",
-                    target: 3000,
-                    operator: ">",
-                    frequency: "daily",
-                    status: "active"
+                    id: 2,
+                    name: "结婚纪念日",
+                    date: tomorrow.toISOString().split('T')[0],
+                    type: "solar",
+                    repeat: "yearly",
+                    remindDays: [7, 30],
+                    notes: "十年了"
                 }
             ];
             
-            updateOverview();
+            updateTodayReminders();
         }
         
-        // 导航函数
-        function goToImportantDays() {
-            showMessage('正在跳转到重要日子管理...');
-            // 实际开发中这里会跳转到对应页面
-            setTimeout(() => {
-                showMessage('功能演示：重要日子管理页面');
-            }, 300);
-        }
-        
-        function goToIndicatorReminder() {
-            showMessage('正在跳转到指标提醒...');
-            // 实际开发中这里会跳转到对应页面
-            setTimeout(() => {
-                showMessage('功能演示：指标提醒设置页面');
-            }, 300);
-        }
-        
-        function addNewItem() {
-            const options = [
-                {text: "添加重要日子", icon: "🎂", action: goToImportantDays},
-                {text: "添加指标监控", icon: "📊", action: goToIndicatorReminder}
-            ];
+        // 更新今日提醒
+        function updateTodayReminders() {
+            const container = document.getElementById('todayReminders');
+            const today = new Date().toISOString().split('T')[0];
             
-            showMessage('请选择要添加的项目类型...');
-            // 实际开发中这里会显示选择菜单
-            setTimeout(() => {
-                showMessage('功能演示：添加项目选择菜单');
-            }, 300);
+            const todayDays = importantDays.filter(day => day.date === today);
+            
+            if (todayDays.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        🎉 今天没有重要日子，放松一下吧！
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            todayDays.forEach(day => {
+                const dateTypeText = day.type === 'lunar' ? '农历' : '阳历';
+                const repeatText = getRepeatText(day.repeat);
+                
+                html += `
+                    <div class="reminder-item">
+                        <div class="reminder-content">${day.name}</div>
+                        <div class="reminder-time">
+                            <span>📅</span>
+                            <span>${dateTypeText} · ${repeatText}</span>
+                            ${day.notes ? `<span style="margin-left:10px;color:#666;">${day.notes}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
         }
         
-        function openSettings() {
-            showMessage('正在打开设置...');
-            // 实际开发中这里会打开设置页面
+        // 获取重复规则文本
+        function getRepeatText(repeatType) {
+            const map = {
+                'yearly': '每年重复',
+                'monthly': '每月重复',
+                'daily': '每日重复',
+                'once': '仅一次'
+            };
+            return map[repeatType] || '自定义重复';
+        }
+        
+        // 更新微信状态
+        function updateWechatStatus() {
+            // 这里可以添加实际的微信状态检查
+            console.log('微信状态检查完成');
+        }
+        
+        // 添加重要日子
+        function addImportantDay() {
+            showMessage('正在打开添加重要日子页面...');
+            
+            // 演示添加流程
             setTimeout(() => {
-                showMessage('功能演示：系统设置页面');
-            }, 300);
+                const newDay = {
+                    id: Date.now(),
+                    name: "示例：爸爸的生日",
+                    date: new Date().toISOString().split('T')[0],
+                    type: "lunar",
+                    repeat: "yearly",
+                    remindDays: [1, 3],
+                    notes: "60大寿"
+                };
+                
+                importantDays.push(newDay);
+                updateTodayReminders();
+                
+                showMessage(`✅ 已添加：${newDay.name}`);
+                showMessage('📅 功能演示：完整的添加页面包含日期选择、重复规则设置等');
+            }, 500);
+        }
+        
+        // 查看所有日子
+        function viewAllDays() {
+            showMessage('正在打开所有重要日子列表...');
+            
+            setTimeout(() => {
+                showMessage(`📋 共有 ${importantDays.length} 个重要日子`);
+                showMessage('📅 功能演示：列表页面支持搜索、筛选、编辑和删除');
+            }, 500);
+        }
+        
+        // 测试微信提醒
+        function testWechatNotification() {
+            if (!wechatConnected) {
+                showMessage('❌ 微信提醒功能未连接，请先配置');
+                return;
+            }
+            
+            showMessage('🔔 正在发送测试微信提醒...');
+            
+            setTimeout(() => {
+                showMessage('✅ 测试提醒已发送！');
+                showMessage('💬 实际微信小程序中会通过微信服务通知发送');
+                showMessage('⏰ 提醒内容：重要日子即将到来');
+            }, 800);
         }
         
         // 显示消息
         function showMessage(text) {
-            // 创建一个临时提示
             const message = document.createElement('div');
             message.style.cssText = `
                 position: fixed;
                 top: 20px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: rgba(0,0,0,0.8);
+                background: rgba(0,0,0,0.85);
                 color: white;
                 padding: 12px 24px;
-                border-radius: 8px;
+                border-radius: 10px;
                 z-index: 1000;
                 font-size: 14px;
                 animation: fadeIn 0.3s ease-out;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255,255,255,0.1);
+                max-width: 80%;
+                text-align: center;
             `;
             message.textContent = text;
             document.body.appendChild(message);
             
-            // 3秒后移除
             setTimeout(() => {
                 message.style.animation = 'fadeOut 0.3s ease-out';
                 setTimeout(() => {
@@ -459,26 +546,26 @@
                         message.parentNode.removeChild(message);
                     }
                 }, 300);
-            }, 2000);
-            
-            // 添加淡出动画
-            if (!document.querySelector('style').textContent.includes('fadeOut')) {
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes fadeOut {
-                        from { opacity: 1; }
-                        to { opacity: 0; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
+            }, 2500);
         }
         
-        // 控制台日志
-        console.log('微信提醒工具 - 重要日子 & 指标提醒');
-        console.log('功能入口：重要日子、指标提醒');
-        console.log('今日概览：实时显示状态');
-        console.log('交互功能：点击卡片测试');
+        // 添加淡出动画
+        if (!document.querySelector('style').textContent.includes('fadeOut')) {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeOut {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // 控制台信息
+        console.log('重要日子提醒 - 简化版');
+        console.log('功能：生日、纪念日管理 + 微信提醒');
+        console.log('特色：农历/阳历支持，自定义重复规则');
+        console.log('状态：微信通知功能已集成');
     </script>
 </body>
 </html>
